@@ -5,8 +5,8 @@ import numpy
 
 # MySQL
 connection = mysql.connect(
-    user='root',
-    password='boryanka',
+    user='Destromo',
+    password='********',
     database='goszak',
     host='127.0.0.1'
     )
