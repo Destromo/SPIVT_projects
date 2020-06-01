@@ -1,0 +1,34 @@
+%matplotlib inline
+
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import mysql.connector as mysql
+
+
+plt.style.use('ggplot')
+plt.rcParams['figure.figsize'] = (10, 5)
+
+
+connection = mysql.connect(
+    user='root',
+    password='boryanka',
+    database='goszak',
+    host='127.0.0.1'
+    )
+# cursor = connection.cursor()
+
+
+df = pd.read_sql('select zakazjik, sum(price) as price from zakup group by zakazjik;', connection)
+
+
+df_zak = df['zakazjik']
+df_price = df['price']
+
+
+
+plt.bar(df_zak, df_price)
+plt.title("Денежные средства по учреждениям!")
+plt.xlabel("Учреждения")
+plt.ylabel("Сумма средств")
+plt.show()
