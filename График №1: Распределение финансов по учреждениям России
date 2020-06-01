@@ -1,0 +1,43 @@
+%matplotlib inline
+
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import mysql.connector as mysql
+
+
+plt.style.use('ggplot')
+plt.rcParams['figure.figsize'] = (10, 5)
+
+
+connection = mysql.connect(
+    user='root',
+    password='boryanka',
+    database='goszak',
+    host='127.0.0.1'
+    )
+# cursor = connection.cursor()
+
+
+df = pd.read_sql('select zakazjik, sum(price) as price from zakup group by zakazjik;', connection)
+
+
+df_zak = df['zakazjik']
+df_price = df['price']
+
+
+dpi = 40
+fig = plt.figure(dpi = dpi, figsize = (512 / dpi, 384 / dpi) )
+mpl.rcParams.update({'font.size': 9})
+
+plt.title('Распределение финансов по учреждениям России')
+
+xs = range(len(df_zak))
+
+plt.pie(
+    df_price, autopct='%.1f', radius = 1.1,
+    explode = [0.15] + [0 for _ in range(len(df_zak) - 1)] )
+plt.legend(
+    bbox_to_anchor = (-0.16, 0.45, 0.25, 0.25),
+    loc = 'lower left', labels = df_zak )
+fig.savefig('pie.png')
