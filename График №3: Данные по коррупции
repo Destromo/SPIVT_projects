@@ -1,0 +1,33 @@
+%matplotlib inline
+
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import mysql.connector as mysql
+
+
+plt.style.use('ggplot')
+plt.rcParams['figure.figsize'] = (10, 5)
+
+
+connection = mysql.connect(
+    user='root',
+    password='boryanka',
+    database='goszak',
+    host='127.0.0.1'
+    )
+
+df = pd.read_sql('select sum(price) as price from zakup', connection)
+sum_fed = 841852000000
+
+a = df['price']
+n = a[0]
+ostatok = sum_fed - n
+
+
+name_index = ["Мои данные", "Федеральный бюджет", "Нехватка"]
+counts_index = [n, sum_fed, ostatok ]
+plt.bar(name_index, counts_index)
+plt.title("Данные по коррупции")
+plt.xlabel("Описание")
+plt.ylabel("деньги, млрд. руб.")
